@@ -1,0 +1,166 @@
+﻿<h3>Pendu</h3>
+
+<button @onclick="GameInit">
+    Start Game!
+</button>
+
+
+<h2>Your Choice</h2>
+
+@if (lifePoints > 0 && !isWin)
+{
+    @foreach (KeyValuePair<char, bool> letter in lettersDict)
+    {
+        <button value="@letter.Key"
+                hidden="@(!letter.Value)"
+                @onclick="() => LetterChoice(letter.Key)">
+            @letter.Key
+        </button>
+    }
+}
+
+
+
+<h2>Secter Word </h2>
+
+@if(lifePoints > 0 && isWin)
+{
+    <h1>Win!!!</h1>
+}
+
+@if(lifePoints > 0)
+{
+    <h3>Life Points: @lifePoints</h3>
+    @foreach (PenduEntity hiddenLetter in secretWord)
+    {
+        <button>
+            @(hiddenLetter.isHidden ? "*" : hiddenLetter.letter)
+
+        </button>
+    }
+}
+else{
+    {
+     <h3>Game over!</h3>   
+    }
+}
+
+
+
+@code {
+    const int LIFE_POINTS = 5;
+
+    private string _hiddenWord = "tools";
+    private bool isWin = false;
+    private char letterToTest;
+    private int lifePoints = LIFE_POINTS;
+    private Dictionary<char, bool> lettersDict = new Dictionary<char, bool>
+        {
+            { 'A', true },
+            { 'B', true },
+            { 'C', true },
+            { 'D', true },
+            { 'E', true },
+            { 'F', true },
+            { 'G', true },
+            { 'H', true },
+            { 'I', true },
+            { 'J', true },
+            { 'K', true },
+            { 'L', true },
+            { 'M', true },
+            { 'N', true },
+            { 'O', true },
+            { 'P', true },
+            { 'Q', true },
+            { 'R', true },
+            { 'S', true },
+            { 'T', true },
+            { 'U', true },
+            { 'V', true },
+            { 'W', true },
+            { 'X', true },
+            { 'Y', true },
+            { 'Z', true }
+        };
+    private List<PenduEntity> secretWord = new();
+
+
+
+    private void GameInit()
+    {
+        foreach (char letter in _hiddenWord)
+        {
+            secretWord.Add(new(char.ToUpper(letter), true));
+        }
+    }
+
+    private void LetterChoice(char letter)
+    {
+        letterToTest = letter;
+        RemoveLifePoints(CheckLetter(letter));
+        isWin = GameWin();
+
+
+        lettersDict[letter] = !lettersDict[letter];
+    }
+
+    private bool CheckLetter(char letter)
+    {
+        bool isLetterExist = false;
+
+        for(int i = 0; i < secretWord.Count; i++)
+        {
+            if (secretWord[i].letter == letter)
+            {
+                secretWord[i].isHidden = !secretWord[i].isHidden;
+                isLetterExist = true;
+            }
+        }
+
+        return isLetterExist;
+
+    }
+
+    private void RemoveLifePoints(bool isLetterExist)
+    {
+        if (!isLetterExist)
+            lifePoints--;
+    }
+
+    private bool GameWin()
+    {
+        bool isWin = true;
+
+        for (int i = 0; i < secretWord.Count; i++)
+        {
+            if (secretWord[i].isHidden == true)
+            {
+                return false;
+            }
+        }
+
+        return isWin;
+    }
+
+
+
+    private class PenduEntity
+    {
+        public PenduEntity(char letter, bool isHidden)
+        {
+            this.letter = letter;
+            this.isHidden = isHidden;
+        }
+
+        public char letter { get; set; }
+        public bool isHidden { get; set; }
+    }
+
+
+
+    
+
+
+
+}
