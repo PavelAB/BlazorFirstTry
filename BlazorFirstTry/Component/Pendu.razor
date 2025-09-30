@@ -17,6 +17,15 @@
             @letter.Key
         </button>
     }
+    <br /> 
+    <br /> 
+    <br />
+    @foreach (KeyValuePair<char, bool> letter in lettersUsed)
+    {
+        <button value="@letter.Key">
+            @letter.Key
+        </button>
+    }
 }
 
 
@@ -41,16 +50,31 @@
 }
 else{
     {
-     <h3>Game over!</h3>   
+        <h3>Game over!</h3>
+        <h2>Word: @penduWord</h2>
+     
     }
 }
 
 
 
 @code {
-    const int LIFE_POINTS = 5;
+    const int LIFE_POINTS = 10;
 
-    private string _hiddenWord = "tools";
+    private List<string> words = new List<string>
+    {
+        "apple", "grape", "lemon", "mango", "peach",
+        "berry", "melon", "olive", "plumb", "chili",
+        "bread", "chair", "clock", "glass", "table",
+        "light", "plant", "river", "stone", "water",
+        "beach", "cloud", "earth", "field", "grass",
+        "house", "music", "night", "ocean", "queen",
+        "scale", "sheep", "smile", "snake", "sound",
+        "spoon", "storm", "sugar", "sword", "tiger",
+        "train", "watch", "whale", "wheat", "world",
+        "zebra", "crown", "flame", "fruit", "money"
+    };
+    private string? penduWord;
     private bool isWin = false;
     private char letterToTest;
     private int lifePoints = LIFE_POINTS;
@@ -83,16 +107,30 @@ else{
             { 'Y', true },
             { 'Z', true }
         };
+    private Dictionary<char, bool> lettersUsed = new();
     private List<PenduEntity> secretWord = new();
 
 
 
     private void GameInit()
     {
+        string _hiddenWord = words[Random.Shared.Next(50)];
+        penduWord = _hiddenWord;
+
+        secretWord.Clear();
         foreach (char letter in _hiddenWord)
         {
             secretWord.Add(new(char.ToUpper(letter), true));
         }
+
+        isWin = false;
+        lettersUsed.Clear();
+        lifePoints = LIFE_POINTS;
+        foreach (char key in lettersDict.Keys.ToList())
+        {
+            lettersDict[key] = true;
+        }
+
     }
 
     private void LetterChoice(char letter)
@@ -101,7 +139,7 @@ else{
         RemoveLifePoints(CheckLetter(letter));
         isWin = GameWin();
 
-
+        lettersUsed.Add(letter ,lettersDict[letter]);
         lettersDict[letter] = !lettersDict[letter];
     }
 
