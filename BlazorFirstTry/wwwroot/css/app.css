@@ -101,3 +101,27 @@ a, .btn-link {
 code {
     color: #c02d76;
 }
+
+.case {
+    min-width: 50px;
+    max-width: 50px;
+    min-height: 50px;
+    max-height: 50px;
+    text-align: center;
+    background-color: lightblue;
+    border: 1px solid black;
+}
+.case:hover{
+    background-color: lightcoral;
+}
+
+.line {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.row {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}

@@ -1,0 +1,23 @@
+﻿
+<div 
+    class="case"
+    @onclick="() => OnClick(Case)">
+    @(Case.IsHidden ? "" : (int)Case.CaseState)
+</div>
+
+@code {
+    [Parameter]
+    public Case Case { get; set; }
+
+    [Parameter]
+    public EventCallback<Case> OnCaseSelect {get; set;}
+
+    public void OnClick(Case cell)
+    {
+        if(cell.IsHidden)
+            cell.IsHidden = !cell.IsHidden;
+
+        if (cell.CaseState == State.Empty)
+            OnCaseSelect.InvokeAsync(cell);
+    }
+}
