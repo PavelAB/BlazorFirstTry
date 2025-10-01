@@ -2,14 +2,13 @@
 <h4>@NmbOfCases</h4>
 
 <div class="line">
-    @for(int y = 0; y < BOARD_SIZE; y++)
+    @for (int y = 0; y < BOARD_SIZE; y++)
     {
         <div class="row">
             @for (int x = 0; x < BOARD_SIZE; x++)
             {
                 Case cell = cases.First(c => c.X == x && c.Y == y);
-                <CaseComponent Case="cell" OnCaseSelect="OnCaseSelect"/>
-                @* <CaseComponent Case="cell"/> *@
+                <CaseSecondVersion Case="cell" />
             }
         </div>
     }
@@ -36,7 +35,7 @@
             }
         }
 
-        for(int i = 0; i < NMB_MINES; i++)
+        for (int i = 0; i < NMB_MINES; i++)
         {
             int x = Random.Shared.Next(BOARD_SIZE);
             int y = Random.Shared.Next(BOARD_SIZE);
@@ -45,7 +44,7 @@
             cell.CaseState = State.Bomb;
         }
 
-        foreach(Case cell in cases)
+        foreach (Case cell in cases)
         {
             if (cell.CaseState != State.Bomb)
                 cell.CaseState = (State)initState(cell);
@@ -68,31 +67,5 @@
         return BombAround;
     }
 
-    private void OnCaseSelect(Case cell)
-    {
-        openCases(cell);
-    }
-
-    private void openCases(Case cell)
-    {
-        if (cell.IsHidden == true)
-            cell.IsHidden = false;
-
-        IEnumerable<Case> BombAround = cases.Where(c =>
-            (Math.Abs(c.X - cell.X) < 2) &&
-            (Math.Abs(c.Y - cell.Y) < 2) &&
-            !(c.X == cell.X && c.Y == cell.Y));
-
-        Console.WriteLine($"Count : {BombAround.Count()}" );
-
-        foreach(Case caseAround in BombAround)
-        {
-            if ((int)caseAround.CaseState > 0 && caseAround.IsHidden == true)
-                caseAround.IsHidden = !caseAround.IsHidden;
-
-            if ((int)caseAround.CaseState == 0 && caseAround.IsHidden == true)
-                openCases(caseAround);
-        }
-    }
 
 }

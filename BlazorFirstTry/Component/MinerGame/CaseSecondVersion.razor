@@ -1,0 +1,64 @@
+﻿@implements IDisposable
+
+<div class="case"
+     @onclick="() => OnClick(Case)">
+    @(Case.IsHidden ? "" : (int)Case.CaseState)
+</div>
+
+@code {
+    [Parameter]
+    public Case Case { get; set; }
+
+    protected override void OnInitialized()
+    {
+        // Console.WriteLine($"JE viens d'Etre initialisé : X:{Case.X} Y:{Case.Y}");
+        Mediator<Case>.Instance.Register(OnMessage);
+
+    }
+    public void Dispose()
+    {
+        Mediator<Case>.Instance.Unregister(OnMessage);
+    }
+
+
+    public void OnClick(Case cell)
+    {
+        if (cell.IsHidden)
+        {
+            Mediator<Case>.Instance.Unregister(OnMessage);
+            cell.IsHidden = !cell.IsHidden;
+            if(cell.CaseState == State.Empty)
+            {
+                Mediator<Case>.Instance.Send(Case);
+            }
+        }
+
+    }
+
+
+    public void OnMessage(Case cell)
+    {
+        Console.WriteLine("Je reponds au message" );
+        // Console.WriteLine($"{cell.X} = {Case.X}");
+        // Console.WriteLine($"{cell.Y} = {Case.Y}");
+        if ((Math.Abs(Case.X - cell.X) < 2) &&
+            (Math.Abs(Case.Y - cell.Y) < 2) &&
+            !(Case.X == cell.X && Case.Y == cell.Y) &&
+            Case.CaseState != State.Bomb &&
+            Case.IsHidden)
+        {
+            Console.WriteLine("Je rentre dans IF");
+            Case.IsHidden = !Case.IsHidden; 
+            StateHasChanged();
+
+            Mediator<Case>.Instance.Unregister(this.OnMessage);
+            if(Case.CaseState == State.Empty)
+            {
+                Mediator<Case>.Instance.Send(Case);
+            }
+
+        }
+
+
+    }
+}
