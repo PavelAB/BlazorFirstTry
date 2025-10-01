@@ -125,3 +125,23 @@ code {
     flex-direction: row;
     gap: 5px;
 }
+
+.dinoCard {
+    min-width: 200px;
+    border: 1px solid gray;
+    border-radius: 15px;
+    background-color: lightgray;
+    flex: 1 1 calc(33.333% - 20px);
+    flex-direction: column;
+    gap: 2px;
+    padding: 20px;
+}
+.dinoCard:hover{
+    background-color: aliceblue;
+}
+.dinoList {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 5px;
+}

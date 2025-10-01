@@ -1,0 +1,13 @@
+﻿
+
+<div class="dinoCard">
+    <h3>@(Dino.Spece == "" ? "???": Dino.Spece)</h3>
+    <p>Weight: @Dino.Weight kg</p>
+    <p>Size: @Dino.Size cm</p>
+</div>
+
+
+@code {
+    [Parameter]
+    public Dino Dino { get; set; }
+}

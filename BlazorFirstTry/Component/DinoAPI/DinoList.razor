@@ -1,0 +1,31 @@
+﻿@inject IHttpClientFactory _factory
+
+<h3>DinoList</h3>
+
+@if(_items is null)
+{
+    <h2> Loading...</h2>
+}
+else
+{
+    <div class="dinoList">
+        @foreach (Dino Dino in _items!)
+        {
+            <DinoCard Dino="Dino" />
+        }
+    </div>
+}
+
+
+@code {
+    private Dino[]? _items;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        HttpClient client = _factory.CreateClient("DinoAPi");
+        _items = await client.GetFromJsonAsync<Dino[]>("api/Dino");
+
+    }
+
+}
