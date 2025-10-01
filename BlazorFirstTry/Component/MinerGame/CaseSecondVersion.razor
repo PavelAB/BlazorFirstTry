@@ -12,12 +12,12 @@
     protected override void OnInitialized()
     {
         // Console.WriteLine($"JE viens d'Etre initialisé : X:{Case.X} Y:{Case.Y}");
-        Mediator<Case>.Instance.Register(OnMessage);
+        Mediator<Case>.Instance.Register(new KeyForDict(Case.X, Case.Y), OnMessage);
 
     }
     public void Dispose()
     {
-        Mediator<Case>.Instance.Unregister(OnMessage);
+        Mediator<Case>.Instance.Unregister(new KeyForDict(Case.X, Case.Y),OnMessage);
     }
 
 
@@ -25,11 +25,11 @@
     {
         if (cell.IsHidden)
         {
-            Mediator<Case>.Instance.Unregister(OnMessage);
+            Mediator<Case>.Instance.Unregister(new KeyForDict(Case.X, Case.Y), OnMessage);
             cell.IsHidden = !cell.IsHidden;
             if(cell.CaseState == State.Empty)
             {
-                Mediator<Case>.Instance.Send(Case);
+                Mediator<Case>.Instance.Send(new KeyForDict(Case.X, Case.Y), Case);
             }
         }
 
@@ -51,10 +51,10 @@
             Case.IsHidden = !Case.IsHidden; 
             StateHasChanged();
 
-            Mediator<Case>.Instance.Unregister(this.OnMessage);
+            Mediator<Case>.Instance.Unregister(new KeyForDict(Case.X, Case.Y), this.OnMessage);
             if(Case.CaseState == State.Empty)
             {
-                Mediator<Case>.Instance.Send(Case);
+                Mediator<Case>.Instance.Send(new KeyForDict(Case.X, Case.Y), Case);
             }
 
         }
