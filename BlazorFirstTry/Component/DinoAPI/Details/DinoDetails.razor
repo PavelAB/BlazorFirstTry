@@ -1,0 +1,28 @@
+﻿@inject IHttpClientFactory _factory
+@page "/dino/details/{Id:int}"
+
+@if(Dino is null)
+{
+    <h1>Loading...</h1>
+}
+
+<div style="display: flex">
+    <h1>@Dino.DinoID : @Dino.Spece </h1>
+
+</div>
+
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    public Dino? Dino { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        HttpClient client = _factory.CreateClient("DinoAPi");
+        Dino = await client.GetFromJsonAsync<Dino>($"api/Dino/{Id}");
+    }
+
+}

@@ -1,6 +1,6 @@
-﻿
+﻿@inject NavigationManager _nav
 
-<div class="dinoCard">
+<div class="dinoCard" @onclick="() => handleClick(Dino.DinoID)">
     <h3>@(Dino.Spece == "" ? "???": Dino.Spece)</h3>
     <p>Weight: @Dino.Weight kg</p>
     <p>Size: @Dino.Size cm</p>
@@ -10,4 +10,9 @@
 @code {
     [Parameter]
     public Dino Dino { get; set; }
+
+    private void handleClick(int id)
+    {
+        _nav.NavigateTo($"dino/details/{id}");
+    }
 }

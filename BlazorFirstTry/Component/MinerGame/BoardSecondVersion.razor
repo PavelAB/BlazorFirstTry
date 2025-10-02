@@ -2,7 +2,7 @@
 <h4>@NmbOfCases</h4>
 
 <div class="line">
-    @for (int y = 0; y < BOARD_SIZE; y++)
+    @for (int y = 0; y < 100; y++)
     {
         <div class="row">
             @for (int x = 0; x < BOARD_SIZE; x++)
@@ -16,7 +16,7 @@
 
 @code {
 
-    const int BOARD_SIZE = 10;
+    const int BOARD_SIZE = 75;
     const int NMB_MINES = 10;
 
     public List<Case> cases = new();
